@@ -1,0 +1,15 @@
+{
+  "accepted/participation_noise.pdf": "fde6346d898c3b6861adde48f8d3a9bb79d1f61f95079354c51047470dec4bea",
+  "accepted/participation_phase.pdf": "460bc37c894667c5136e2f07023c64364971943a91051340803412208cb08449",
+  "accepted/simulation.json": "38838a4797ca335300b86242be8619ff4da663260e65b90b13d3bd7f8fe2a42e",
+  "accepted_checks.txt": "ba1bf2207a84ddb46f3dc13c17bd02bc2f88e185156b167c9fbb9de23396a5a3",
+  "endpoint_samples.npz": "e8083351eb45673ccf3c41efe5ac7cfcc6bb78d6c8df62d337404ee451278e79",
+  "horizon_rows.tex": "232dccca4cffbfd9f2086c1b3d4d956789aff926a19b6d6cbc3df1eb02dd3955",
+  "horizon_table.tex": "478a7ed62170523f8397d7d6c0ca904fc3ce202befbeabeaede61e0830f4a54d",
+  "participation_noise_camera_ready_v2.pdf": "ef4dfb856067c49052306b37c7f9718b98361becc096fccf4d0b5970ffcd9f6a",
+  "rng_states.json": "6de3a4db46c72c6846129d69e08e079b26606930ab7e3ab617336587e74d8279",
+  "simulation.json": "92cddd376e49ce0eab82dc69da028721b5a9968a688b4cfd7d090912b5f7f99d",
+  "unequal_and_delay.txt": "6777e03eefd296e3366b238ab9f1e0c9cc5a4e6f59cb4a1e15121c27ff823baf",
+  "variance_rows.tex": "5c27b9632437bb9d7552837c8c56ad25222d965cd43ec942eda88fac87584dab",
+  "variance_table.tex": "f5ef087ee5a187d264172e2bec62d2dc0bd1744e1465498147f4514eaa1b94ff"
+}

@@ -1,0 +1,65 @@
+{
+  "seed": 20260904,
+  "replicates": 2000,
+  "rounds": 1500,
+  "n": 500,
+  "m": 500,
+  "beta": 5,
+  "lambda": 0.35,
+  "rows": [
+    {
+      "alpha": 0,
+      "mean": 0.4926429710011986,
+      "mean_abs_deviation": 0.4929029418414968,
+      "se_abs_deviation": 3.931944356608066e-05,
+      "variance": 0.24302378658487125,
+      "linear_variance": null,
+      "large_deviation_rate": 1.0
+    },
+    {
+      "alpha": 0.4,
+      "mean": 0.5094990387252779,
+      "mean_abs_deviation": 0.2575781939521511,
+      "se_abs_deviation": 0.00014508373581719963,
+      "variance": 0.06633153756323622,
+      "linear_variance": null,
+      "large_deviation_rate": 1.0
+    },
+    {
+      "alpha": 0.6,
+      "mean": 0.5010342162396724,
+      "mean_abs_deviation": 0.03379886118177582,
+      "se_abs_deviation": 0.0004879573985204164,
+      "variance": 0.001618069191669239,
+      "linear_variance": null,
+      "large_deviation_rate": 0.0005
+    },
+    {
+      "alpha": 0.7,
+      "mean": 0.4998366398200011,
+      "mean_abs_deviation": 0.011419206788261126,
+      "se_abs_deviation": 0.0001905857666361152,
+      "variance": 0.00020308268442097746,
+      "linear_variance": 0.00021228758169934665,
+      "large_deviation_rate": 0.0
+    },
+    {
+      "alpha": 0.9,
+      "mean": 0.4998831594875039,
+      "mean_abs_deviation": 0.008428702191233357,
+      "se_abs_deviation": 0.0001433815122995648,
+      "variance": 0.00011218141751244908,
+      "linear_variance": 0.00011011990407673862,
+      "large_deviation_rate": 0.0
+    },
+    {
+      "alpha": 1,
+      "mean": 0.5000504529335648,
+      "mean_abs_deviation": 0.008184842820631848,
+      "se_abs_deviation": 0.000134769037637679,
+      "variance": 0.00010334800482042015,
+      "linear_variance": 0.00010606060606060608,
+      "large_deviation_rate": 0.0
+    }
+  ]
+}

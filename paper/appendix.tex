@@ -1,0 +1,83 @@
+\section{Connecting invitation, response, and policy shares}\label{app:calibration}
+The main model assumes equal invitation probabilities. To see why this matters, let group shares be $w$ and $1-w$, invitation probabilities be $\iota_1(x),\iota_2(x)>0$, and conditional response probabilities be $r_1(x),r_2(x)>0$. The respondent share and its log odds are
+\begin{align*}
+p_w(x)&=\frac{w\iota_1(x)r_1(x)}{w\iota_1(x)r_1(x)+(1-w)\iota_2(x)r_2(x)},\\
+\log\frac{p_w(x)}{1-p_w(x)}&=\log\frac{w}{1-w}+\log\frac{\iota_1(x)}{\iota_2(x)}+\log\frac{r_1(x)}{r_2(x)}.
+\end{align*}
+Differentiation shows that a policy-dependent invitation ratio contributes to the respondent log-odds slope. Respondent composition alone cannot separate invitation and conditional-response contributions. Representative response at $x=w$ requires equal invitation--response products, not merely equal invitation counts. The main theorems continue to use their stated equal-invitation model.
+
+For a concrete symmetric example, invite everyone ($\iota_1=\iota_2=1$) and take $\beta=5$, $x=.6$. Then $r_1=\sigma(1)=.7311$ and $r_2=.2689$, giving population-average response probability $.5$ but respondent share $.7311$. At $\lambda=.35$, the next service share is $.6459$ without audit and $.5893$ with $\alpha=.7$. Pooled response volume at the current state is unchanged, yet the audit reverses the policy's movement relative to parity. These are model calculations, not measured human responses.
+
+\section{Criticality, unequal populations, and delayed feedback}\label{app:boundaries}
+The critical symmetric expansion is $y_{t+1}=y_t-ky_t^3+O(y_t^5)$ with $k=\lambda\beta^2/12$. For a nonzero trajectory converging monotonically to zero,
+\[
+\frac{1}{y_{t+1}^2}-\frac{1}{y_t^2}
+=\frac{(1-ky_t^2+O(y_t^4))^{-2}-1}{y_t^2}=2k+O(y_t^2).
+\]
+Averaging these increments gives $y_t^{-2}/t\to2k$, yielding the main paper's $t^{-1/2}$ rate. Exponential half-life formulas are therefore inappropriate at equality. A small residual after a finite simulation horizon is not evidence of a second deterministic attractor.
+
+For the unequal-population example, roots of $x=(1-\alpha)\sigma(\log(w/(1-w))+2\beta(x-w))+\alpha w$ are bracketed on $[0,1]$ and refined by bisection. At $w=.2$, $\beta=5$, $\alpha=.5$, they are approximately $.20000$, $.28782$, and $.54230$. The first and third attract; the middle repels. The local feedback factor at $.2$ is $.8$, although a distant attractor remains. At $\alpha=.7$ the global feedback-target derivative bound $(1-\alpha)\beta/2=.75<1$ guarantees a contracting update and uniqueness, consistent with the root $.2$. At $\lambda=.35$, the full update derivative is bounded by $.9125$. The derivative bound, not numerical root search alone, supplies the global guarantee.
+
+For one-round delay, linearized errors obey $e_{t+1}=(1-\lambda)e_t+\lambda\gamma e_{t-1}$. Its roots are
+\[
+z_\pm=\frac{1-\lambda\pm\sqrt{(1-\lambda)^2+4\lambda\gamma}}{2}.
+\]
+When $\gamma>0$, one root is positive and one negative. The positive root is below one exactly when $\gamma<1$; in that case the negative root is above $-1$, since the characteristic polynomial at $-1$ is $2-\lambda(1+\gamma)>0$. At $\gamma=0$, the roots are $0$ and $1-\lambda$. At equality $\gamma=1$, roots are $1$ and $-\lambda$: strict contraction fails, and the linearization alone cannot establish nonlinear critical stability. In particular, $\lambda=1$ also gives root $-1$. We do not extend the no-delay critical-rate result to this boundary.
+
+\section{Simulation precision and the approximation near criticality}\label{app:simulation}
+The simulation estimand is $\operatorname{Var}(x_T)$ across independent deployments under the declared update, not uncertainty in a fitted human-response parameter. Every condition starts at $x_0=.5$, uses $\beta=5$, $\lambda=.35$, $n=m=500$, and has $R=2{,}000$ deployments. Each round draws a fresh endogenous count from $\operatorname{Binomial}(500,p(x_t))$ and a fresh audit count from $\operatorname{Binomial}(500,.5)$. The two count vectors are independent, and draws use fresh randomness across rounds and deployments. Policy states within a deployment are temporally dependent. Endpoint variance uses denominator $R-1=1{,}999$.
+
+\paragraph{Exact generator and draw order.}
+The six original conditions use NumPy's \texttt{Generator(PCG64(20260904))} and run in the order $0,.4,.6,.7,.9,1$, without reseeding between conditions. Within a condition, rounds run in ascending order; at each round the generator draws the full endogenous vector in deployment-index order, then the full audit vector, and then updates all states simultaneously. Both vectors are drawn even if one stream has zero policy weight. Retaining these conventions reproduces Table~\ref{tab:simulation} and the original variance rows to printed precision.
+
+The new conditions run in the order $.6001,.601,.605,.61,.62,.65$. They use separate \texttt{PCG64} streams from the six children of \texttt{SeedSequence(20261004).spawn(6)}, in that order. All use the same round-major draw convention. Each trajectory continues through rounds 1,500, 5,000, and 15,000; these checkpoints are paired within a deployment. Saved endpoint arrays and initial/checkpoint generator states permit direct inspection. The workflow uses Python 3.13.5, NumPy 2.3.5, and Matplotlib 3.10.8, with pinned dependencies.
+
+\paragraph{Monte Carlo standard error of estimated variance.}
+Let $s^2=(R-1)^{-1}\sum_j(x_{j,T}-\bar x_T)^2$. Write $s^2_{(-j)}$ for the sample variance after removing deployment $j$, using denominator $R-2$, and $\bar s^2_{(-)}=R^{-1}\sum_j s^2_{(-j)}$. We estimate
+\begin{equation}
+\widehat{\operatorname{MCSE}}(s^2)=
+\left[\frac{R-1}{R}\sum_{j=1}^R
+\left(s^2_{(-j)}-\bar s^2_{(-)}\right)^2\right]^{1/2}.
+\label{eq:variance-mcse}
+\end{equation}
+This delete-one jackknife estimates uncertainty from finitely many independent deployments without assuming Gaussian endpoint shares. It is distinct from the deployment standard deviation $s$. Figure~\ref{fig:noise} uses approximate 95\% Monte Carlo bars $s^2\pm1.96\widehat{\operatorname{MCSE}}$; these quantify precision of a simulation summary, not a 95\% range for an individual deployment. Horizon contrasts use the same deletion index at both checkpoints, preserving their pairing. This follows the simulation-uncertainty distinction emphasized by \citet{morris2019}.
+
+\begin{table}[htbp]\centering
+\caption{Variance checks after 1,500 rounds, with all other original settings fixed. Variances and MCSEs are in units of $10^{-4}$. The local finite-horizon prediction is $V_\infty^{\rm lin}(1-d^{3000})$; the stationary column is Eq.~\eqref{eq:variance}. Relative discrepancy compares observed and stationary variance. The last three conditions reproduce the accepted results.}
+\label{tab:variance-audit}
+\input{../results/variance_rows}
+\begin{tabular}{rrrrrr}\toprule
+$\alpha$ & Observed & MCSE & Local, $T=1500$ & Local, stationary & Discrepancy\\\midrule
+\variancerows
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:variance-audit} directly tests conditions approaching $.6$ from above. At $.6001$, accounting for the finite horizon reduces the linear prediction from $.182022$ to $.042026$, but both remain far above the observed $.001573$. At $.605$ the finite-horizon and stationary predictions already agree to the displayed precision, yet the discrepancy remains 67.2\%. Thus insufficient settling of the linear recursion cannot explain the whole mismatch. At $.65$, the 3.1\% discrepancy is about one MCSE of the variance estimate; agreement is also close at $.7,.9,1$.
+
+\begin{table}[htbp]\centering
+\caption{Longer horizons for the six added conditions. Entries are observed variance $\pm$ one MCSE, in units of $10^{-4}$. Every column has 2,000 independent deployments; checkpoints share the same trajectories. These finite-horizon checks do not establish an exact stationary law.}
+\label{tab:horizon}
+\input{../results/horizon_rows}
+\begin{tabular}{rrrr}\toprule
+$\alpha$ & $T=1500$ & $T=5000$ & $T=15000$\\\midrule
+\horizonrows
+\bottomrule
+\end{tabular}
+\end{table}
+
+For $.601$ and $.605$, the increase from 1,500 to 15,000 rounds is about 2.5 and 2.8 paired MCSEs, respectively, so some finite-horizon variation is detectable. Nevertheless, at 15,000 rounds their observed variances remain $.001633$ and $.001326$, far below stationary predictions $.018222$ and $.003662$. The near-threshold approximation gap therefore persists after a tenfold increase in horizon.
+
+The nonlinear conditional mean restores more strongly away from parity through the negative cubic term stated in Section~\ref{sec:noise}. Moreover, its endogenous innovation variance contains $p(x_t)(1-p(x_t))/n$, which is at most $1/(4n)$ and decreases away from parity. The local model replaces it by its value at parity. Both approximations matter when fluctuations leave the linear neighborhood. At $\alpha=1$ the mean update is linear and the stationary variance expression is exact; remaining discrepancies arise from Monte Carlo uncertainty. At or below the threshold, the linear stationary prediction is not evaluated.
+
+The complete workflow, including exact replay of the original results, checks, figures, and added scenarios, took 26.4 seconds on an Apple Silicon central processing unit (CPU). It uses no trained model, external dataset, or service. The accompanying code contains a single entry point, the full draw conventions, saved arrays, environment information, and executable checks; a fresh output directory prevents accidental overwriting.
+
+\section{Separating a stability budget from a sampling budget}\label{app:budget}
+Write $a=1-\alpha$. With label costs $k_e,k_a>0$ and total expenditure $C=k_en+k_am$, Cauchy--Schwarz gives
+\[
+\left(\frac{a^2}{n}+\frac{\alpha^2}{m}\right)(k_en+k_am)
+\ge(a\sqrt{k_e}+\alpha\sqrt{k_a})^2.
+\]
+For $0<\alpha<1$, equality yields $n/m=(a/\alpha)\sqrt{k_a/k_e}$. At endpoint weights, allocate to the sole nonzero-weight stream. The minimum local innovation variance is $\lambda^2(a\sqrt{k_e}+\alpha\sqrt{k_a})^2/(4C)$. Effective weight is fixed and reweighting is allowed; this neither chooses the welfare target nor repairs audit bias. Integer counts require feasible rounding.
+
+At equal costs, $B=1000$ and $\alpha=.7$, the allocation is $(n,m)=(300,700)$ rather than the simulated $(500,500)$. The parity innovation coefficient $a^2/n+\alpha^2/m$ falls from $.00116$ to $.00100$, a 13.79\% reduction. The feedback gain remains $.75$ in either design. This is a conditional variance calculation, not an additional simulation result. The saved experiments intentionally hold both sample sizes fixed while varying effective audit weight, isolating a different design question.
