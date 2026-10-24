@@ -1,4 +1,10 @@
-# Camera-ready revision: 4 October 2026
+# Camera-ready revisions
+
+## 23 October 2026: final-paper disclosures
+
+Added an unnumbered acknowledgments and funding-disclosure section before the references, using the workshop template's `ack` environment. The author confirmed no external funding and no competing financial interests. The abstract, scientific text, experiments, and results are unchanged. The earlier release remains available as version 1.0.0.
+
+## 4 October 2026: review response
 
 The accepted analysis is preserved. This revision addresses the review's requests for near-threshold validation, uncertainty in simulation summaries, and a directly executable public workflow.
 
